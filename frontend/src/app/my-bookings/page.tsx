@@ -37,7 +37,7 @@ export default function MyBookingsPage() {
     if (!confirmCancel) return;
 
     try {
-      await api.delete(`/bookings/${id}`); // ✅ unified delete
+      await api.delete(`/bookings/${id}`); 
       alert("Booking cancelled successfully!");
       setBookings((prev) => prev.filter((b) => b.booking_id !== id));
     } catch {

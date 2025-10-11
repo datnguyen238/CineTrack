@@ -70,8 +70,6 @@ export default function MainPage() {
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6">
-      <h1 className="text-3xl font-bold mb-6">🎬 CineTrack</h1>
-
       {/* Search + Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         {/* Search bar */}
