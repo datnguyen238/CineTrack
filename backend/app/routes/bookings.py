@@ -32,13 +32,20 @@ def book_seat(seat_id: int = Query(...), user_id: int = Query(...)):
         if is_reserved:
             raise HTTPException(status_code=400, detail="Seat already reserved")
 
-        # 2. Reserve seat + insert booking in one transaction
+        # 2. Fetch user name from app_user
+        cur.execute("SELECT name FROM app_user WHERE user_id = %s;", (user_id,))
+        user_row = cur.fetchone()
+        if not user_row:
+            raise HTTPException(status_code=404, detail="User not found")
+        user_name = user_row["name"]
+
+        # 3. Reserve seat + insert booking in one transaction
         cur.execute("UPDATE seat SET is_reserved = TRUE WHERE seat_id = %s;", (seat_id,))
         cur.execute("""
-            INSERT INTO booking (seat_id, user_id, booking_time)
-            VALUES (%s, %s, NOW())
+            INSERT INTO booking (seat_id, user_id, user_name, booking_time)
+            VALUES (%s, %s, %s, NOW())
             RETURNING booking_id;
-        """, (seat_id, user_id))
+        """, (seat_id, user_id, user_name))
         booking = cur.fetchone()
         conn.commit()
 
@@ -48,6 +55,7 @@ def book_seat(seat_id: int = Query(...), user_id: int = Query(...)):
             "seat_id": seat_id,
             "showtime_id": showtime_id,
             "user_id": user_id,
+            "user_name": user_name,
             "booking_time": datetime.now(),
         }
 
@@ -55,7 +63,7 @@ def book_seat(seat_id: int = Query(...), user_id: int = Query(...)):
         conn.rollback()
         raise
     except Exception as e:
-        conn.rollback()  # roll back any partial reservation
+        conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         cur.close()
@@ -71,7 +79,8 @@ def get_bookings(user_id: int = Query(...)):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT b.booking_id, m.title, st.theater, st.show_time, s.seat_number, b.booking_time
+        SELECT b.booking_id, m.title, st.theater, st.show_time, 
+               s.seat_number, b.booking_time, b.user_name
         FROM booking b
         JOIN seat s ON b.seat_id = s.seat_id
         JOIN showtime st ON s.showtime_id = st.showtime_id
@@ -92,6 +101,7 @@ def get_bookings(user_id: int = Query(...)):
             "show_time": r["show_time"],
             "seat_number": r["seat_number"],
             "booking_time": r["booking_time"],
+            "user_name": r["user_name"],
         }
         for r in rows
     ]
