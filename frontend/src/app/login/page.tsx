@@ -60,7 +60,7 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ Don't render until we know login status
+  // Don't render until we know login status
   if (!checkedUser) return null;
 
   return (
