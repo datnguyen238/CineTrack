@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [checkedUser, setCheckedUser] = useState(false); // prevent infinite loop
 
-  // ✅ Check if already logged in
+  // Check if already logged in
   useEffect(() => {
     try {
       const stored = localStorage.getItem("user");
@@ -43,7 +43,7 @@ export default function LoginPage() {
       setLoading(true);
       const res = await api.post("/users/login", form);
 
-      // ✅ ensure user_id exists
+      // Ensure user_id exists
       if (!res.data.user_id) {
         alert("Invalid response from server. Please try again.");
         return;
