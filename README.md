@@ -1,7 +1,7 @@
 # CineTrack Project
 
 ## Overview
-The CineTrack application is designed for users to be able to view both current and upcoming movies based on different categories.
+The CineTrack application is designed for users to be able to view both current and upcoming movies based on different categories & reserve seats for specific showtimes.
 
 ## Project Framework
 The backend of the project is using python and fastapi, while the frontend is using Next.js.
