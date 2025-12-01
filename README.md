@@ -54,6 +54,10 @@ For the CineTrack app, there are four entieies and three relationships
 
 ![ER Diagram](CSE_412_Project_1.png)
 
+**Overall Information**
+
+![Final project report](pending)
+
 ## Instructions on how to start project
 
 1. Clone the repository on your local machine.
