@@ -54,7 +54,7 @@ For the CineTrack app, there are four entieies and three relationships
 
 ![ER Diagram](CSE_412_Project_1.png)
 
-**Overall Information**
+**Overall Information with Final Report**
 
 ![Final project report](pending)
 
